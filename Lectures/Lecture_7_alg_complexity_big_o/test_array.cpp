@@ -145,3 +145,28 @@ TEST_CASE("Test remove/clear with timestamp", "[ArrayBagInt]")
 
   // Hint: decrease or increase the size of the bag by a factor
 }
+
+TEST_CASE("Test clear4 time complexity", "[ArrayBagInt]")
+{
+  ArrayBagInt bag;
+  clock_t start;
+  clock_t end;
+  for (int i = 1; i <= 5; i++)
+  {
+    for (int j = 0; j < std::pow(10, i); j++)
+    {
+      bag.add(j);
+    }
+    start = clock();
+    bag.clear4();
+    end = clock();
+    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+    std::cout << "clear4() time used: " << seconds << " seconds for " << std::pow(10, i) << " items" << std::endl;
+  }
+
+  // The time complexity is definitly very bad for clear4(), it takes almost 8 seconds to clear a bag
+  // with 100000 items even though it takes less than 0.1 seconds to clear a bag with 10000 items
+  // and less than a milisecond for 1000 items
+  // that is much worse than linear growth
+  // 10x bigger n leads to ~100x more time, which is expected for a O(n^2) algorithm
+}
